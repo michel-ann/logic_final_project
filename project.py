@@ -106,20 +106,17 @@ rd = [Int(i) for i in range(6)]
 re = [Int(i) for i in range(6)]
 rf = [Int(i) for i in range(6)]
 
-ind_c = (And [0 <= a < 6]
-             [0 <= b < 6]
-             [0 <= c < 6]
-             [0 <= d < 6]
-             [0 <= e < 6]
-             [0 <= f < 6])
+ind_c = (And (0 <= a < 6)
+             (0 <= b < 6)
+             (0 <= c < 6)
+             (0 <= d < 6)
+             (0 <= e < 6)
+             (0 <= f < 6))
 
 ind_all_c = (Sum(a, b, c, d, e, f) == 15)
 
 # ^^ will give the index of which tile we are dealing with
 #       in the tiles array 
-# NOTE : this did not work because i guess permutations does not acutally give a list?
-
-
 # a is the tile index for pos 0
 # b is the tile index for pos 1
 # c is the tile index for pos 2
@@ -128,27 +125,27 @@ ind_all_c = (Sum(a, b, c, d, e, f) == 15)
 # f is the tile index for pos 5
 
 ## The variable r needs to be replaced with something else to make this work
-pos0_c = [[And ( ((tiles[ (tiles[a]) ][ra])[5] == (tiles[ (tiles[d]) ][rd])[2])
-                ((tiles[ (tiles[a]) ][ra])[0] == (tiles[ (tiles[b]) ][rb])[3]))]
+pos0_c = [[And ( ( ((tiles[a]) [ra]) [5] == ((tiles[d]) [rd]) [2])
+                 ( ((tiles[a]) [ra]) [0] == ((tiles[b]) [rb]) [3]))]
                 for r in range(6)]
     #condition for the colors in position 0
 
-pos1_c = [[And ( ((tiles[ (tiles[b]) ][rb])[5] == (tiles[ (tiles[e]) ][re])[2])
-                ((tiles[ (tiles[b]) ][rb])[4] == (tiles[ (tiles[d]) ][rd])[1])
-                ((tiles[ (tiles[b]) ][rb])[0] == (tiles[ (tiles[c]) ][rc])[3]))]
+pos1_c = [[And ( ( ((tiles[b]) [rb]) [5] == ((tiles[e]) [re]) [2])
+                 ( ((tiles[b]) [rb]) [4] == ((tiles[d]) [rd]) [1])
+                 ( ((tiles[b]) [rb]) [0] == ((tiles[c]) [rc]) [3]))]
                  for r in range(6)]
     #condition for the colors in position 1
 
-pos2_c = [[((tiles[ (tiles[c]) ][rc])[4] == (tiles[ (tiles[e]) ][re])[1])]
+pos2_c = [[( ((tiles[c]) [rc]) [4] == ((tiles[e]) [re]) [1])]
                  for r in range(6)]
     #condition for the colors in position 2
 
-pos3_c = [[And ( ((tiles[ (tiles[d]) ][rd])[0] == (tiles[ (tiles[e]) ][re])[3])
-                ((tiles[ (tiles[d]) ][rd])[5] == (tiles[ (tiles[f]) ][rf])[2]))]
+pos3_c = [[And ( ( ((tiles[d]) [rd]) [0] == ((tiles[e]) [re]) [3])
+                 ( ((tiles[d]) [rd]) [5] == ((tiles[f]) [rf]) [2]))]
                  for r in range(6)]
     #condition for the colors in position 3
 
-pos4_c = [[((tiles[ (tiles[e]) ][re])[4] == (tiles[ (tiles[f]) ][rf])[1])]
+pos4_c = [[( ((tiles[e]) [re]) [4] == ((tiles[f]) [rf]) [1])]
                  for r in range(6)]
     #condition for the colors in position 4
 
@@ -158,18 +155,36 @@ thinkominous_c = ind_c + ind_all_c + pos0_c + pos1_c + pos2_c + pos3_c + pos4_c
 
 #position
 # Will be talking to Jason about this later 
-instance = (...) #I dont know what the instance would be in this case ???
+#instance = (0, 0, 0, 0, 0, 0) # start all of them at 0 -> empty
 
-instance_c = [ If(instance)] # make the instance condition **still need to do this part
+
+# a is pos0 ---> f is pos5
+#^^ these are the indexes of the tiles -> so the position theyll be placed in
+positions = [ [ (tiles[a]) [ra] ],
+              [ (tiles[b]) [rb] ],
+              [ (tiles[c]) [rc] ],
+              [ (tiles[d]) [rd] ],
+              [ (tiles[e]) [re] ],
+              [ (tiles[f]) [rf] ] ]
+
+instance = ( (), (), (), (), (), () )
+
+# make the positions array with the completed randomized values
+# use instance with either each position having an empty array or somthing like that
+# then check if its empty and set them equal
+
+instance_c = [ If(instance[i] == (),
+                    True,
+                    positions[i] == instance[i])
+                for i in range(6) ]
 
 s = Solver()
 s.add(thinkominous_c + instance_c) # put the two final conditions in the solver
 
 if s.check() == sat:  #check if satisfiable
   m = s.model()
-  r = [ [ m.evaluate( ** variable chosen ** ) for **ranges**]] # will replace these once the setup variables are figured out
+  r = [ m.evaluate(positions[i]) for i in range(6)] # will replace these once the setup variables are figured out
   print_matrix(r) #prints out the solution
-
-else
-  print "failed to solve"
+else:
+  print ("failed to solve")
 
