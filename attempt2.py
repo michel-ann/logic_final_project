@@ -19,14 +19,13 @@ color_arrng = [ [1, 5, 4, 2, 6, 3],
                 [2, 6, 4, 1, 5, 3],
                 [6, 5, 1, 4, 2, 3] ]
 
-
 tiles_arr = []
 for colors in color_arrng :
     for tilepos in (0, 1, 2, 3, 4, 5) :
         colorArr = []
         for i in (0, 1, 2, 3, 4, 5) :
             newList = rotate_list(colors, i)
-            colorArr.append(newList) #need to figure out how to get the right colors
+            colorArr.append(newList) 
         for tile_option in colorArr :
             for n in tile_option :
                 tiles_arr.append("x_%s = %s" % (((6 * tilepos) + n), n))
@@ -146,4 +145,6 @@ thinkominous_c = color_c + position_c
 
 sol = Solver()
 
+## Stopped here because we realized we couldnt really go further with this implementation
+    # did too much of the iteration part so not much was left to work with for the solver
 
