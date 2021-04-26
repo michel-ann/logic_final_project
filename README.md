@@ -13,6 +13,6 @@ Our first attempt at this solver is shown in attempt1.py but it was later scrapp
 Next, we tried another implementation but it turned out to be ooverly complicated, and is shown in attempt2.py
 
 The current / final version of the solver is in finalAttempt.py
-  Note: This does not actually work - it never returns the final solution because there is an error in the 
+Note: This does not actually work - it never returns the final solution because there is an error in the 
         rotations constraint. However, the implementation itself is correct and the general layout of the 
         program would have worked 
