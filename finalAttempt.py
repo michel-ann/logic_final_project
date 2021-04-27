@@ -89,6 +89,7 @@ rotation_constraints =  [ [Implies ( (And([tile_pos[tile_id] == (k + 1),
 
 flattened_constr2 = [item for sublist in rotation_constraints for item in sublist] #combine into one list so we can add to constr
 
+
 # The representation of the tiles
 #               30  31
 #               32  33
